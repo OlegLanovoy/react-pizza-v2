@@ -33,13 +33,12 @@ export const CartItem: React.FC<CartItemProps> = ({
     dispatch(
       addItem({
         id,
-        size,
       } as CartItemType)
     );
   };
 
-  const onClickMinus = ({ id, size }) => {
-    dispatch(minusItem(id, size));
+  const onClickMinus = (id: number) => {
+    dispatch(minusItem(id));
   };
 
   const onClickRemove = () => {
