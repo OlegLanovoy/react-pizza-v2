@@ -6,18 +6,19 @@ export type Pizza = {
   sizes: number[];
   types: number[];
   rating: number;
+  category: number;
 };
 
 export enum Status {
-  LOADING = 'loading',
-  SUCCESS = 'completed',
-  ERROR = 'error',
+  LOADING = "loading",
+  SUCCESS = "completed",
+  ERROR = "error",
 }
 
 export type SearchPizzaParams = {
+  category: string;
   sortBy: string;
   order: string;
-  category: string;
   search: string;
   currentPage: string;
 };

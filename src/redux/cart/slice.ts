@@ -1,16 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { calcTotalPrice } from '../../utils/calcTotalPrice';
-import { getCartFromLS } from '../../utils/getCartFromLS';
-import { CartItem, CartSliceState } from './types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { calcTotalPrice } from "../../utils/calcTotalPrice";
+import { getCartFromLS } from "../../utils/getCartFromLS";
+import { CartItem, CartSliceState } from "./types";
 
 const initialState: CartSliceState = getCartFromLS();
 
 const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
     addItem(state, action: PayloadAction<CartItem>) {
-      const findItem = state.items.find((obj) => obj.id === action.payload.id);
+      const findItem = state.items.find(
+        (obj) =>
+          obj.id === action.payload.id && obj.size === action.payload.size
+      );
 
       if (findItem) {
         findItem.count++;
@@ -23,8 +26,10 @@ const cartSlice = createSlice({
 
       state.totalPrice = calcTotalPrice(state.items);
     },
-    minusItem(state, action: PayloadAction<string>) {
-      const findItem = state.items.find((obj) => obj.id === action.payload);
+    minusItem(state, action: PayloadAction<{ id: string; size: number }>) {
+      const findItem = state.items.find(
+        (obj) => obj.id === action.payload && obj.size === action.payload.size
+      );
 
       if (findItem) {
         findItem.count--;
