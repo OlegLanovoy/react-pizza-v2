@@ -28,17 +28,17 @@ export const CartItem: React.FC<CartItemProps> = ({
   imageUrl,
 }) => {
   const dispatch = useDispatch();
-
   const onClickPlus = () => {
     dispatch(
       addItem({
         id,
+        size,
       } as CartItemType)
     );
   };
 
-  const onClickMinus = (id: number) => {
-    dispatch(minusItem(id));
+  const onClickMinus = () => {
+    dispatch(minusItem({ id, size }));
   };
 
   const onClickRemove = () => {
