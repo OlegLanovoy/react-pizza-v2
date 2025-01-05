@@ -1,16 +1,19 @@
 import React from "react";
+import { useState } from "react";
+
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCartItemById } from "../../redux/cart/selectors";
 import { CartItem } from "../../redux/cart/types";
 import { addItem } from "../../redux/cart/slice";
+import { selectCartTotalCountById } from "../../redux/cart/selectors";
 
 const typeNames = ["тонкое", "традиционное"];
 
 type PizzaBlockProps = {
   id: string;
   title: string;
-  price: number;
+  prices: number[];
   imageUrl: string;
   sizes: number[];
   types: number[];
@@ -20,23 +23,23 @@ type PizzaBlockProps = {
 export const PizzaBlock: React.FC<PizzaBlockProps> = ({
   id,
   title,
-  price,
+  prices,
   imageUrl,
   sizes,
   types,
 }) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(selectCartItemById(id));
-  const [activeType, setActiveType] = React.useState(0);
-  const [activeSize, setActiveSize] = React.useState(0);
+  const totalCount = useSelector(selectCartTotalCountById(id));
+  const [activeType, setActiveType] = useState(0);
+  const [activeSize, setActiveSize] = useState(0);
 
-  const addedCount = cartItem ? cartItem.count : 0;
+  //   КАКОГО ХУЯ ДОЛЖЕН ПИСАТЬ ВОТ ТАК    price: prices[activeSize], А НЕ ТАК price
 
   const onClickAdd = () => {
     const item: CartItem = {
       id,
       title,
-      price,
+      price: prices[activeSize],
       imageUrl,
       type: typeNames[activeType],
       size: sizes[activeSize],
@@ -77,7 +80,7 @@ export const PizzaBlock: React.FC<PizzaBlockProps> = ({
           </ul>
         </div>
         <div className="pizza-block__bottom">
-          <div className="pizza-block__price">от {price} ₽</div>
+          <div className="pizza-block__price">от {prices[activeSize]} ₽</div>
           <button
             onClick={onClickAdd}
             className="button button--outline button--add"
@@ -95,7 +98,7 @@ export const PizzaBlock: React.FC<PizzaBlockProps> = ({
               />
             </svg>
             <span>Добавить</span>
-            {addedCount > 0 && <i>{addedCount}</i>}
+            {totalCount > 0 && <i>{totalCount}</i>}
           </button>
         </div>
       </div>

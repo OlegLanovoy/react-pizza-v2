@@ -1,0 +1,23 @@
+.full-pizza__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  margin-right: 10px;
+  justify-content: space-between;
+}
+
+.full-pizza__title {
+  margin: 15px 0;
+}
+
+.full-pizza__all {
+  display: flex;
+  flex-direction: column; /* Arrange children in a column */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  text-align: center; /* Optionally center text inside elements */
+}

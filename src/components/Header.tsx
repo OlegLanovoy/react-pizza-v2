@@ -19,6 +19,7 @@ export const Header: React.FC = () => {
   React.useEffect(() => {
     if (isMounted.current) {
       const json = JSON.stringify(items);
+      //   console.log("saved data:", json);
       localStorage.setItem("cart", json);
     }
 

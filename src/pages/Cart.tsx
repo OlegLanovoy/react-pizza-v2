@@ -1,9 +1,11 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { CartItem, CartEmpty } from "../components";
 
+import AlertConfirm from "../components/AlertConfirm";
 import { selectCart } from "../redux/cart/selectors";
 import { clearItems } from "../redux/cart/slice";
 
@@ -21,10 +23,19 @@ const Cart: React.FC = () => {
     0
   );
 
-  const onClickClear = () => {
-    if (window.confirm("Очистить корзину?")) {
-      dispatch(clearItems());
-    }
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const onClickOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    dispatch(clearItems());
+    setIsModalOpen(false);
+  };
+
+  const onClickClose = () => {
+    setIsModalOpen(false);
   };
 
   if (!totalPrice) {
@@ -38,14 +49,14 @@ const Cart: React.FC = () => {
           <h2 className="content__title">
             <CartIcon /> Корзина
           </h2>
-          <div onClick={onClickClear} className="cart__clear">
+          <div onClick={onClickOpen} className="cart__clear">
             <TrashIcon />
             <span>Очистить корзину</span>
           </div>
         </div>
         <div className="content__items">
           {items.map((item: any) => (
-            <CartItem key={item.id} {...item} />
+            <CartItem key={item.uniqueKey} {...item} />
           ))}
         </div>
         <div className="cart__bottom">
@@ -71,6 +82,13 @@ const Cart: React.FC = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <AlertConfirm
+          message="U realyy dont want pizza?"
+          onConfirm={handleConfirm}
+          onCancel={onClickClose}
+        />
+      )}
     </div>
   );
 };

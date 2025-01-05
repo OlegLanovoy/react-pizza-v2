@@ -1,14 +1,16 @@
 import React from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem, minusItem, removeItem } from "../redux/cart/slice";
 import { CartItem as CartItemType } from "../redux/cart/types";
+import AlertConfirm from "./AlertConfirm";
 
 //IMPORT OF ASSETS
 import { PlusBtn } from "../assets/img/iconsSVG/PlusBtn";
 import { MinusBtn } from "../assets/img/iconsSVG/MinusBtn";
 import { CrossBtn } from "../assets/img/iconsSVG/CrossBtn";
 
-type CartItemProps = {
+export type CartItemProps = {
   id: string;
   title: string;
   type: string;
@@ -29,22 +31,25 @@ export const CartItem: React.FC<CartItemProps> = ({
 }) => {
   const dispatch = useDispatch();
   const onClickPlus = () => {
-    dispatch(
-      addItem({
-        id,
-        size,
-      } as CartItemType)
-    );
+    dispatch(addItem({ id, size, type } as CartItemType));
   };
-
   const onClickMinus = () => {
-    dispatch(minusItem({ id, size }));
+    dispatch(minusItem({ id, size, type }));
   };
 
-  const onClickRemove = () => {
-    if (window.confirm("Ты действительно хочешь удалить товар?")) {
-      dispatch(removeItem(id));
-    }
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const onClickOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    dispatch(removeItem({ id, size, type }));
+    setIsModalOpen(false);
+  };
+
+  const onClickClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -79,12 +84,19 @@ export const CartItem: React.FC<CartItemProps> = ({
       </div>
       <div className="cart__item-remove">
         <div
-          onClick={onClickRemove}
+          onClick={onClickOpen}
           className="button button--outline button--circle"
         >
           <CrossBtn />
         </div>
       </div>
+      {isModalOpen && (
+        <AlertConfirm
+          message="Delete pizza?"
+          onConfirm={handleConfirm}
+          onCancel={onClickClose}
+        />
+      )}
     </div>
   );
 };
